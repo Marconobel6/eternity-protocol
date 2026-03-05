@@ -1,65 +1,73 @@
-import Image from "next/image";
+import Link from 'next/link'
+import { supabase } from '@/lib/supabase'
+import ArticleCard from '@/components/ArticleCard'
+import EmailSignup from '@/components/EmailSignup'
+import TopicCard from '@/components/TopicCard'
 
-export default function Home() {
+export const revalidate = 60
+
+export default async function Home() {
+  const { data: articles } = await supabase
+    .from('articles')
+    .select('*')
+    .eq('status', 'published')
+    .order('published_at', { ascending: false })
+    .limit(3)
+
+  const topics = [
+    { title: 'GLP-1 Weight Loss', description: 'Semaglutide, tirzepatide, and the science of metabolic regulation.', icon: '⚖️', href: '/research?cat=glp-1' },
+    { title: 'Peptides', description: 'BPC-157, thymosin, and peptide therapy protocols.', icon: '🧬', href: '/research?cat=peptides' },
+    { title: 'Longevity Science', description: 'Rapamycin, NAD+, senolytics, and anti-aging research.', icon: '🔬', href: '/research?cat=longevity' },
+    { title: 'Metabolic Health', description: 'Body composition, insulin sensitivity, and biohacking.', icon: '💪', href: '/research?cat=biohacking' },
+  ]
+
   return (
-    <div className="flex min-h-screen items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex min-h-screen w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
+    <div>
+      {/* Hero */}
+      <section className="relative bg-navy text-white overflow-hidden">
+        <div className="absolute inset-0 bg-gradient-to-br from-navy via-navy to-blue-900 opacity-90" />
+        <div className="relative max-w-6xl mx-auto px-4 sm:px-6 py-20 md:py-32">
+          <h1 className="text-4xl md:text-6xl font-bold mb-4 leading-tight">The Science of<br />Living Longer</h1>
+          <p className="text-lg md:text-xl text-gray-300 max-w-xl mb-8">Evidence-based research on peptides, GLP-1 weight loss, and longevity science. Join a global community of researchers and biohackers.</p>
+          <div className="flex gap-4">
+            <Link href="/research" className="px-6 py-3 bg-accent text-white font-medium rounded-lg hover:bg-blue-700 transition-colors">Explore Research</Link>
+            <Link href="/community" className="px-6 py-3 bg-white/10 text-white font-medium rounded-lg border border-white/20 hover:bg-white/20 transition-colors">Join Community</Link>
+          </div>
         </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
-      </main>
+      </section>
+
+      <div className="max-w-6xl mx-auto px-4 sm:px-6">
+        {/* Topics */}
+        <section className="py-16">
+          <h2 className="text-2xl md:text-3xl font-bold text-navy mb-8">Research Topics</h2>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+            {topics.map(t => <TopicCard key={t.title} {...t} />)}
+          </div>
+        </section>
+
+        {/* Featured Articles */}
+        <section className="py-16 border-t border-gray-100">
+          <div className="flex items-center justify-between mb-8">
+            <h2 className="text-2xl md:text-3xl font-bold text-navy">Latest Research</h2>
+            <Link href="/research" className="text-accent text-sm font-medium hover:underline">View all →</Link>
+          </div>
+          {articles && articles.length > 0 ? (
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              {articles.map(a => <ArticleCard key={a.id} article={a} />)}
+            </div>
+          ) : (
+            <div className="text-center py-12 bg-gray-50 rounded-xl">
+              <p className="text-gray-500 mb-2">Research articles launching soon.</p>
+              <p className="text-sm text-gray-400">Subscribe below to get notified.</p>
+            </div>
+          )}
+        </section>
+
+        {/* Email Signup */}
+        <section className="py-16">
+          <EmailSignup />
+        </section>
+      </div>
     </div>
-  );
+  )
 }
