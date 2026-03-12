@@ -7,7 +7,7 @@ export default async function ResearchPage({ searchParams }: { searchParams: Pro
   const params = await searchParams
   const category = params.cat
 
-  let query = supabase.from("articles").select("*").eq("status", "published").order("published_at", { ascending: false })
+  let query = supabase.from("articles").select("*").eq("status", "published").order("published_at", { ascending: true })
   if (category) query = query.eq("category", category)
   const { data: articles } = await query
 

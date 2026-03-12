@@ -11,7 +11,7 @@ export default async function Home() {
     .from("articles")
     .select("*")
     .eq("status", "published")
-    .order("published_at", { ascending: false })
+    .order("published_at", { ascending: true })
     .limit(3)
 
   const topics = [
@@ -52,7 +52,7 @@ export default async function Home() {
       <section className="bg-cream">
         <div className="max-w-[1200px] mx-auto px-5 sm:px-8 py-16 md:py-20">
           <div className="flex items-center justify-between mb-10">
-            <h2 className="text-[28px] md:text-[36px] font-normal tracking-[-0.04em] text-[rgba(0,0,0,0.88)]">Latest Research</h2>
+            <h2 className="text-[28px] md:text-[36px] font-normal tracking-[-0.04em] text-[rgba(0,0,0,0.88)]">Article Knowledge Base</h2>
             <Link href="/research" className="text-[14px] font-medium text-forest hover:text-forest-light transition-colors flex items-center gap-1">
               View all <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" /></svg>
             </Link>
