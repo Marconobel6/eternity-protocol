@@ -1,7 +1,7 @@
 export default function AboutPage() {
   return (
-    <div className="max-w-3xl mx-auto px-4 sm:px-6 py-12">
-      <h1 className="text-3xl md:text-4xl font-bold text-navy mb-6">About Eternity Protocol</h1>
+    <div className="max-w-[720px] mx-auto px-5 sm:px-8 py-12 md:py-16">
+      <h1 className="text-[36px] md:text-[48px] font-normal tracking-[-0.05em] text-[rgba(0,0,0,0.88)] mb-8">About Eternity Protocol</h1>
       <div className="prose">
         <p>Eternity Protocol is a research and community platform dedicated to the science of longevity, peptide therapy, GLP-1 weight loss, and metabolic health optimization.</p>
         <h2>Our Mission</h2>

@@ -1,32 +1,36 @@
-import Link from 'next/link'
-import type { Article } from '@/lib/supabase'
+import Link from "next/link"
+import type { Article } from "@/lib/supabase"
 
 const categoryColors: Record<string, string> = {
-  peptides: 'bg-blue-100 text-blue-700',
-  'glp-1': 'bg-green-100 text-green-700',
-  longevity: 'bg-purple-100 text-purple-700',
-  biohacking: 'bg-orange-100 text-orange-700',
-  general: 'bg-gray-100 text-gray-700',
+  peptides: "bg-[#e8efe8] text-[#3d6454]",
+  "glp-1": "bg-[#eee9e0] text-[#7a6840]",
+  longevity: "bg-[#ebe4f0] text-[#5a4870]",
+  biohacking: "bg-[#fce8db] text-[#8a5c3a]",
+  general: "bg-[#f0f0f0] text-[#555]",
 }
 
 export default function ArticleCard({ article }: { article: Article }) {
   const color = categoryColors[article.category] || categoryColors.general
-  const date = article.published_at ? new Date(article.published_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) : ''
+  const date = article.published_at ? new Date(article.published_at).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" }) : ""
 
   return (
-    <Link href={`/research/${article.slug}`} className="group block bg-white rounded-xl border border-gray-100 overflow-hidden hover:shadow-lg transition-all duration-300 hover:-translate-y-1">
-      {article.cover_image_url && (
-        <div className="aspect-video bg-gray-100 overflow-hidden">
-          <img src={article.cover_image_url} alt={article.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />
+    <Link href={`/research/${article.slug}`} className="group block bg-white rounded-[20px] overflow-hidden hover:shadow-xl transition-all duration-500 border border-black/[0.04]">
+      {article.cover_image_url ? (
+        <div className="aspect-[16/10] bg-sage-bg overflow-hidden">
+          <img src={article.cover_image_url} alt={article.title} className="w-full h-full object-cover group-hover:scale-[1.03] transition-transform duration-500" />
+        </div>
+      ) : (
+        <div className="aspect-[16/10] bg-gradient-to-br from-sage-bg to-cream flex items-center justify-center">
+          <span className="text-4xl opacity-30">🧬</span>
         </div>
       )}
-      <div className="p-5">
-        <div className="flex items-center gap-2 mb-3">
-          <span className={`text-xs font-medium px-2 py-1 rounded-full ${color}`}>{article.category}</span>
-          {date && <span className="text-xs text-gray-400">{date}</span>}
+      <div className="p-6">
+        <div className="flex items-center gap-2.5 mb-3">
+          <span className={`text-[12px] font-medium px-3 py-1 rounded-full ${color}`}>{article.category}</span>
+          {date && <span className="text-[12px] text-[rgba(0,0,0,0.35)]">{date}</span>}
         </div>
-        <h3 className="font-semibold text-navy group-hover:text-accent transition-colors mb-2 line-clamp-2">{article.title}</h3>
-        {article.excerpt && <p className="text-sm text-gray-500 line-clamp-3">{article.excerpt}</p>}
+        <h3 className="text-[17px] font-medium tracking-[-0.02em] text-[rgba(0,0,0,0.88)] group-hover:text-forest transition-colors mb-2 leading-snug line-clamp-2">{article.title}</h3>
+        {article.excerpt && <p className="text-[14px] text-[rgba(0,0,0,0.45)] leading-relaxed line-clamp-3">{article.excerpt}</p>}
       </div>
     </Link>
   )
